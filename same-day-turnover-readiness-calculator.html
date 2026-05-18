@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Same-Day Turnover Readiness Calculator</title>
+  <meta name="description" content="Use this free same-day turnover readiness calculator to check cleaner photos, starter supplies, open issues, laundry, and final ready status before the next guest arrives.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://balllba.github.io/hostproof-tools-site/same-day-turnover-readiness-calculator.html">
+  <meta property="og:title" content="Free Same-Day Turnover Readiness Calculator">
+  <meta property="og:description" content="A free browser-based readiness check for remote short-term rental hosts before guest check-in.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="scorecard-preview.png">
+  <link rel="icon" href="data:,">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Same-Day Turnover Readiness Calculator",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "url": "https://balllba.github.io/hostproof-tools-site/same-day-turnover-readiness-calculator.html",
+    "description": "A free browser-based calculator that helps short-term rental hosts check cleaner photos, starter supplies, laundry, open issues, and final ready status before check-in.",
+    "publisher": { "@type": "Organization", "name": "HostProof Tools" },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <style>
+    :root {
+      --ink: #1f342f;
+      --muted: #52635d;
+      --paper: #f5f6f1;
+      --white: #ffffff;
+      --line: #cbd7d1;
+      --sage: #dfe9e2;
+      --green: #2e6f61;
+      --gold: #f0bd4f;
+      --coral: #d85d39;
+      --blue: #dce7f2;
+      --focus: #113f67;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      padding: 18px 42px;
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    .brand,
+    .topbar a {
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      color: #dbe8e1;
+      font-size: 14px;
+    }
+
+    .tool-shell {
+      padding: 42px;
+    }
+
+    .tool-grid {
+      width: min(1220px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(330px, .75fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .intro {
+      margin: 0 0 26px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 840px;
+      margin: 0 0 14px;
+      font-size: 52px;
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .intro p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .check-panel {
+      padding: 22px;
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      min-height: 94px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+    }
+
+    .check-item input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--green);
+    }
+
+    .check-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 16px;
+    }
+
+    .check-item span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .time-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 160px;
+      gap: 16px;
+      align-items: end;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    label {
+      font-weight: 700;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 12px;
+      color: var(--ink);
+      background: var(--white);
+      font-size: 16px;
+    }
+
+    .hint {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .result {
+      position: sticky;
+      top: 18px;
+      padding: 22px;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+
+    .score-row strong {
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      padding: 0 12px;
+      color: var(--white);
+      background: var(--coral);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge.ready {
+      background: var(--green);
+    }
+
+    .badge.watch {
+      background: #9a6a11;
+    }
+
+    .meter {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--sage);
+      margin-bottom: 18px;
+    }
+
+    .meter span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: var(--coral);
+      transition: width .2s ease, background .2s ease;
+    }
+
+    .result h2,
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .actions-list {
+      margin: 0 0 18px;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .actions-list li {
+      margin-bottom: 8px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 0 18px;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .button.primary {
+      background: var(--gold);
+      color: #18231f;
+      border-color: var(--gold);
+    }
+
+    .button.ghost {
+      background: var(--white);
+      color: var(--ink);
+      border-color: var(--line);
+    }
+
+    .handoff {
+      width: 100%;
+      min-height: 122px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      color: var(--ink);
+      background: #fbfcfa;
+      font: 14px/1.45 Arial, Helvetica, sans-serif;
+    }
+
+    .section {
+      padding: 58px 42px;
+    }
+
+    .section.white {
+      background: var(--white);
+    }
+
+    .inner {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 0 0 26px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .resource-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .preview-image {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    .preview-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .item {
+      min-height: 170px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+    }
+
+    .section.white .item {
+      background: var(--paper);
+    }
+
+    .item h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 26px 42px;
+      background: var(--ink);
+      color: #dbe8e1;
+      font-size: 14px;
+    }
+
+    .footer .inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .topbar,
+      .tool-shell,
+      .section,
+      .footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .tool-grid,
+      .check-grid,
+      .grid,
+      .resource-split,
+      .time-row {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      .result {
+        position: static;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">HostProof Tools</a>
+    <nav class="nav" aria-label="Site navigation">
+      <a href="same-day-turnover-cleaner-photo-proof.html">Photo Proof Guide</a>
+      <a href="https://payhip.com/b/jyPCY">Free Scorecard</a>
+      <a href="https://payhip.com/b/gAdtP">Full Kit</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="tool-shell" aria-labelledby="tool-title">
+      <div class="tool-grid">
+        <div>
+          <div class="intro">
+            <p class="eyebrow">Free host tool</p>
+            <h1 id="tool-title">Same-Day Turnover Readiness Calculator</h1>
+            <p>Use this before you mark a short-term rental guest-ready. Check the proof you already have, see the risk level, then copy a short cleaner handoff message.</p>
+          </div>
+
+          <div class="panel check-panel">
+            <div class="check-grid" id="checks">
+              <label class="check-item">
+                <input type="checkbox" data-key="photos" data-weight="18">
+                <span><strong>Final room photos received</strong>Same angles for entry, kitchen, bathrooms, bedrooms, and main living areas.</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-key="supplies" data-weight="18">
+                <span><strong>Starter supplies checked</strong>Toilet paper, hand soap, trash bags, towels, linens, and kitchen basics are confirmed.</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-key="laundry" data-weight="16">
+                <span><strong>Laundry and linens ready</strong>Sheets, towels, extra linens, and same-day laundry bottlenecks are handled.</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-key="issues" data-weight="16">
+                <span><strong>Open issues noted</strong>Damage, odors, leaks, missing items, low supplies, or repairs are reported before the cleaner leaves.</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-key="bathroom" data-weight="14">
+                <span><strong>Bathroom and kitchen proof included</strong>High-risk guest complaint areas are shown clearly, not just wide room photos.</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-key="ready" data-weight="18">
+                <span><strong>Final ready text sent</strong>Cleaner sent a clear status such as "Property ready. Photos sent. Supplies checked."</span>
+              </label>
+            </div>
+
+            <div class="time-row">
+              <label for="hours">
+                Hours until guest check-in
+                <p class="hint">Use 0 if the guest can arrive now.</p>
+              </label>
+              <input id="hours" type="number" min="0" max="72" step="0.5" value="4">
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel result" aria-live="polite">
+          <div class="score-row">
+            <strong id="score">0</strong>
+            <span class="badge" id="badge">Not ready</span>
+          </div>
+          <div class="meter" aria-hidden="true"><span id="meter"></span></div>
+          <h2 id="statusTitle">Get proof before approving</h2>
+          <ul class="actions-list" id="actions"></ul>
+          <label for="handoff">Cleaner handoff text</label>
+          <textarea class="handoff" id="handoff" readonly></textarea>
+          <div class="button-row">
+            <button class="button" id="copyBtn" type="button">Copy Text</button>
+            <a class="button primary" href="https://payhip.com/b/jyPCY">Download Free Scorecard</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section white">
+      <div class="inner">
+        <h2>Why this tool exists</h2>
+        <p class="lead">The failure point is usually not the cleaning itself. It is the handoff between "cleaner says done" and "host can approve the property remotely."</p>
+        <div class="grid">
+          <article class="item">
+            <h3>Short enough for cleaners</h3>
+            <p>The calculator focuses on photos, supplies, issue notes, and one final ready status. No long property-management report.</p>
+          </article>
+          <article class="item">
+            <h3>Clear enough for hosts</h3>
+            <p>A remote host can see what proof is missing before the next guest becomes the first person to notice a problem.</p>
+          </article>
+          <article class="item">
+            <h3>Useful before software</h3>
+            <p>It works as a lightweight browser tool and pairs with the printable scorecard if you need a repeatable checklist.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="inner resource-split">
+        <div>
+          <h2>Use it with the full HostProof kit</h2>
+          <p class="lead">The free calculator is for the single turnover decision. The full kit adds editable trackers for cleaner handoff, inventory, maintenance, issue logs, vendors, and monthly review.</p>
+          <div class="button-row">
+            <a class="button primary" href="https://payhip.com/b/gAdtP">View the Full Kit</a>
+            <a class="button ghost" href="same-day-turnover-cleaner-photo-proof.html">Read the Photo Proof Guide</a>
+          </div>
+        </div>
+        <figure class="preview-image">
+          <img src="scorecard-preview.png" alt="Turnover readiness scorecard preview">
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="inner">
+      <div>HostProof Tools</div>
+      <div>This free tool stores no data and is not affiliated with Airbnb, Vrbo, Booking.com, or any booking platform.</div>
+    </div>
+  </footer>
+
+  <script>
+    const checks = Array.from(document.querySelectorAll('#checks input[type="checkbox"]'));
+    const hoursInput = document.getElementById('hours');
+    const scoreEl = document.getElementById('score');
+    const badgeEl = document.getElementById('badge');
+    const meterEl = document.getElementById('meter');
+    const statusTitle = document.getElementById('statusTitle');
+    const actionsEl = document.getElementById('actions');
+    const handoffEl = document.getElementById('handoff');
+    const copyBtn = document.getElementById('copyBtn');
+
+    const labels = {
+      photos: 'final room photos',
+      supplies: 'starter supplies',
+      laundry: 'laundry and linens',
+      issues: 'open issue notes',
+      bathroom: 'bathroom and kitchen proof',
+      ready: 'final ready text'
+    };
+
+    function calculate() {
+      const checked = checks.filter(input => input.checked);
+      const missing = checks.filter(input => !input.checked);
+      const hours = Math.max(0, Number(hoursInput.value || 0));
+      let score = checked.reduce((sum, input) => sum + Number(input.dataset.weight || 0), 0);
+
+      if (hours < 2 && missing.length > 0) score = Math.max(0, score - 12);
+      if (hours < 1 && missing.length > 1) score = Math.max(0, score - 10);
+      score = Math.min(100, Math.round(score));
+
+      let badge = 'Not ready';
+      let badgeClass = '';
+      let title = 'Get proof before approving';
+      let meterColor = 'var(--coral)';
+
+      if (score >= 86 && missing.length === 0) {
+        badge = 'Ready';
+        badgeClass = 'ready';
+        title = 'Ready to mark guest-ready';
+        meterColor = 'var(--green)';
+      } else if (score >= 65) {
+        badge = 'Watch';
+        badgeClass = 'watch';
+        title = 'Close, but confirm the gaps';
+        meterColor = '#9a6a11';
+      }
+
+      const actions = [];
+      if (missing.length === 0) {
+        actions.push('Save the photos and final ready text in the turnover record.');
+        actions.push('If a guest issue appears later, compare it against this handoff.');
+      } else {
+        missing.slice(0, 4).forEach(input => {
+          actions.push(`Ask for ${labels[input.dataset.key]} before approving the turnover.`);
+        });
+      }
+      if (hours < 2 && missing.length > 0) {
+        actions.unshift('Check-in is close. Prioritize proof for bathrooms, beds, starter supplies, and any visible issue areas.');
+      }
+
+      scoreEl.textContent = score;
+      badgeEl.textContent = badge;
+      badgeEl.className = `badge ${badgeClass}`;
+      meterEl.style.width = `${score}%`;
+      meterEl.style.background = meterColor;
+      statusTitle.textContent = title;
+      actionsEl.innerHTML = actions.map(action => `<li>${action}</li>`).join('');
+      handoffEl.value = buildHandoff(missing, hours);
+    }
+
+    function buildHandoff(missing, hours) {
+      if (missing.length === 0) {
+        return 'Property ready. Photos sent. Supplies checked. No open issues noted.';
+      }
+
+      const needs = missing.map(input => labels[input.dataset.key]).join(', ');
+      const urgency = hours < 2 ? ' Guest check-in is close, so please send this before leaving.' : '';
+      return `Before I mark the turnover ready, please send: ${needs}.${urgency}`;
+    }
+
+    checks.forEach(input => input.addEventListener('change', calculate));
+    hoursInput.addEventListener('input', calculate);
+    copyBtn.addEventListener('click', async () => {
+      handoffEl.select();
+      try {
+        await navigator.clipboard.writeText(handoffEl.value);
+        copyBtn.textContent = 'Copied';
+        setTimeout(() => { copyBtn.textContent = 'Copy Text'; }, 1200);
+      } catch (error) {
+        document.execCommand('copy');
+      }
+    });
+
+    calculate();
+  </script>
+</body>
+</html>
